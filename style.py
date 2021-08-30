@@ -2,9 +2,9 @@ from __future__ import print_function
 import sys, os, pdb
 sys.path.insert(0, 'src')
 import numpy as np, scipy.misc 
-from optimize import optimize
+from src.optimize import optimize
 from argparse import ArgumentParser
-from utils import save_img, get_img, exists, list_files
+from src.utils import save_img, get_img, exists, list_files
 import evaluate
 
 CONTENT_WEIGHT = 7.5e0
@@ -15,8 +15,8 @@ LEARNING_RATE = 1e-3
 NUM_EPOCHS = 2
 CHECKPOINT_DIR = 'checkpoints'
 CHECKPOINT_ITERATIONS = 2000
-VGG_PATH = 'data/imagenet-vgg-verydeep-19.mat'
-TRAIN_PATH = 'data/train2014'
+VGG_PATH = 'content/data/imagenet-vgg-verydeep-19.mat'
+TRAIN_PATH = 'content/train2014'
 BATCH_SIZE = 4
 DEVICE = '/gpu:0'
 FRAC_GPU = 1

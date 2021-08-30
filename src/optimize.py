@@ -2,7 +2,7 @@ from __future__ import print_function
 import functools
 import src.vgg, pdb, time
 import tensorflow as tf, numpy as np, os
-import transform
+import src.transform
 from utils import get_img
 
 STYLE_LAYERS = ('relu1_1', 'relu2_1', 'relu3_1', 'relu4_1', 'relu5_1')
@@ -54,7 +54,7 @@ def optimize(content_targets, style_target, content_weight, style_weight,
             )
             preds_pre = preds
         else:
-            preds = transform.net(X_content/255.0)
+            preds = src.transform.net(X_content/255.0)
             preds_pre = src.vgg.preprocess(preds)
 
         net = src.vgg.net(vgg_path, preds_pre)
