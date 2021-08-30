@@ -1,6 +1,6 @@
 from __future__ import print_function
 import functools
-import vgg, pdb, time
+import src.vgg, pdb, time
 import tensorflow as tf, numpy as np, os
 import transform
 from utils import get_img
@@ -30,8 +30,8 @@ def optimize(content_targets, style_target, content_weight, style_weight,
     # precompute style features
     with tf.Graph().as_default(), tf.device('/cpu:0'), tf.compat.v1.Session() as sess:
         style_image = tf.compat.v1.placeholder(tf.float32, shape=style_shape, name='style_image')
-        style_image_pre = vgg.preprocess(style_image)
-        net = vgg.net(vgg_path, style_image_pre)
+        style_image_pre = src.vgg.preprocess(style_image)
+        net = src.vgg.net(vgg_path, style_image_pre)
         style_pre = np.array([style_target])
         for layer in STYLE_LAYERS:
             features = net[layer].eval(feed_dict={style_image:style_pre})
@@ -41,11 +41,11 @@ def optimize(content_targets, style_target, content_weight, style_weight,
 
     with tf.Graph().as_default(), tf.compat.v1.Session() as sess:
         X_content = tf.compat.v1.placeholder(tf.float32, shape=batch_shape, name="X_content")
-        X_pre = vgg.preprocess(X_content)
+        X_pre = src.vgg.preprocess(X_content)
 
         # precompute content features
         content_features = {}
-        content_net = vgg.net(vgg_path, X_pre)
+        content_net = src.vgg.net(vgg_path, X_pre)
         content_features[CONTENT_LAYER] = content_net[CONTENT_LAYER]
 
         if slow:
@@ -55,9 +55,9 @@ def optimize(content_targets, style_target, content_weight, style_weight,
             preds_pre = preds
         else:
             preds = transform.net(X_content/255.0)
-            preds_pre = vgg.preprocess(preds)
+            preds_pre = src.vgg.preprocess(preds)
 
-        net = vgg.net(vgg_path, preds_pre)
+        net = src.vgg.net(vgg_path, preds_pre)
 
         content_size = _tensor_size(content_features[CONTENT_LAYER])*batch_size
         assert _tensor_size(content_features[CONTENT_LAYER]) == _tensor_size(net[CONTENT_LAYER])
@@ -131,7 +131,7 @@ def optimize(content_targets, style_target, content_weight, style_weight,
                     _style_loss,_content_loss,_tv_loss,_loss,_preds = tup
                     losses = (_style_loss, _content_loss, _tv_loss, _loss)
                     if slow:
-                       _preds = vgg.unprocess(_preds)
+                       _preds = src.vgg.unprocess(_preds)
                     else:
                        saver = tf.compat.v1.train.Saver()
                        res = saver.save(sess, save_path)
