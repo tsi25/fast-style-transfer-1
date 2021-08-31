@@ -34,7 +34,7 @@ def ffwd_video(path_in, path_out, checkpoint_dir, device_t='/gpu:0', batch_size=
         img_placeholder = tf.compat.v1.placeholder(tf.float32, shape=batch_shape,
                                          name='img_placeholder')
 
-        preds = transform.net(img_placeholder)
+        preds = src.transform.net(img_placeholder)
         saver = tf.compat.v1.train.Saver()
         if os.path.isdir(checkpoint_dir):
             ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
@@ -90,7 +90,7 @@ def ffwd(data_in, paths_out, checkpoint_dir, device_t='/gpu:0', batch_size=4):
         img_placeholder = tf.compat.v1.placeholder(tf.float32, shape=batch_shape,
                                          name='img_placeholder')
 
-        preds = transform.net(img_placeholder)
+        preds = src.transform.net(img_placeholder)
         saver = tf.compat.v1.train.Saver()
         if os.path.isdir(checkpoint_dir):
             ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
